@@ -10,4 +10,5 @@ http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 request = Net::HTTP::Get.new(uri.request_uri)
 
 response = http.request(request)
-puts response.body
+#puts response.body
+puts URI.extract(response.body, ['http', 'https'])
