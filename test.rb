@@ -11,4 +11,10 @@ request = Net::HTTP::Get.new(uri.request_uri)
 
 response = http.request(request)
 #puts response.body
-puts URI.extract(response.body, ['http', 'https'])
+arrayContent = URI.extract(response.body, ['http', 'https'])
+
+
+for element in arrayContent do
+  puts element
+  uri = URI.parse(element)
+end
