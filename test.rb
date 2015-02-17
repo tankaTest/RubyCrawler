@@ -13,8 +13,13 @@ response = http.request(request)
 #puts response.body
 arrayContent = URI.extract(response.body, ['http', 'https'])
 
-
 for element in arrayContent do
-  puts element
-  uri = URI.parse(element)
+	begin
+	puts element
+	uri = URI.parse(element)
+	rescue 
+    # Error found
+    puts "Error found during parsing  (URI::InvalidURIError)"
+	ensure
+	end
 end
