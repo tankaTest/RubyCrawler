@@ -13,6 +13,20 @@ response = http.request(request)
 #puts response.status
 
 regex=/href="([^"]+)"/
-myarray = response.body.scan(regex)
-puts myarray
+arrayLink = response.body.scan(regex)
+#puts linksArray
 
+
+
+for element in arrayLink do
+	begin
+	puts element
+	uri = URI.parse(element)
+	puts 'URI host: ' + uri.host
+
+	rescue 
+    # Error found
+    #puts "Error found during parsing  (URI::InvalidURIError)"
+	ensure
+	end
+end
