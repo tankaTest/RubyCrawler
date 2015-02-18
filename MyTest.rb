@@ -21,9 +21,6 @@ arrayLink = response.body.scan(regex)
 for element in arrayLink do
 	begin
 	puts element
-	uri = URI.parse(element)
-	puts 'URI host: ' + uri.host
-
 	rescue 
     # Error found
     #puts "Error found during parsing  (URI::InvalidURIError)"
