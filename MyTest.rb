@@ -2,13 +2,14 @@ require "net/https"
 require "uri"
 require 'set'
 
-$i = 0
+
 $recursionArray = Set.new []
 p $recursionArray
 
-def visit_url(new_uri)
-puts " "*$i+new_uri
-	$i += 1
+def visit_url(new_uri, i)
+
+puts " "*i+new_uri
+	
 	home_uri="https://www.bondora.com/"
 	uri = URI.parse(new_uri)
 	http = Net::HTTP.new(uri.host, uri.port)
@@ -32,8 +33,8 @@ puts " "*$i+new_uri
 			$recursionArray.add(new_uri)
 			#puts "Then  #{$i}  #{new_uri}"
 				#recursion depth limit to exit from cycle
-				if $i<4 then 
-				visit_url (new_uri)
+				if i<4 then 
+				visit_url new_uri, i+1
 				end
 			$recursionArray.add(new_uri)
 			#puts " "*$i+new_uri
@@ -46,13 +47,11 @@ puts " "*$i+new_uri
 		#continue operation
 		end
 	end
-
-$i-=1
 end
 
 
 home_uri="https://www.bondora.com/"
-visit_url (home_uri)
+visit_url home_uri, 0
 
 puts "Full:"
 $recursionArray.each{ |i| puts i } 
