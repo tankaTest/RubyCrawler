@@ -2,13 +2,21 @@ require "net/https"
 require "uri"
 require 'set'
 
-
 $recursionArray = Set.new []
-p $recursionArray
 
 def visit_url(new_uri, i)
-
-puts " "*i+new_uri
+	
+	if i>10 then 
+		return
+	end
+	
+	if $recursionArray.include?(new_uri) == false then
+		$recursionArray.add(new_uri)
+	else 
+		return
+	end
+	
+	puts " "*i+new_uri
 	
 	home_uri="https://www.bondora.com/"
 	uri = URI.parse(new_uri)
@@ -17,42 +25,26 @@ puts " "*i+new_uri
 	http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 	request = Net::HTTP::Get.new(uri.request_uri)
-	response = http.request(request)
+	
+		begin
+		response = http.request(request)
+		rescue
+		ensure
+		end
 
 	regex = /href="\/([^"]+)"/
-	#arrayLink = []
-	#harrayLinkUniq = []
 	arrayLink = response.body.scan(regex)
 	arrayLinkUniq = arrayLink.uniq
 	
 	for element in arrayLinkUniq do
-		begin
-		new_uri = "#{home_uri}#{element[0]}"		
-			#Create unique array of links during recursion
-			if $recursionArray.include?(new_uri) == false then
-			$recursionArray.add(new_uri)
-			#puts "Then  #{$i}  #{new_uri}"
-				#recursion depth limit to exit from cycle
-				if i<4 then 
-				visit_url new_uri, i+1
-				end
-			$recursionArray.add(new_uri)
-			#puts " "*$i+new_uri
-			end
-		
-		rescue 
-		# Skip if Error found
-		#puts "Error found during parsing  (URI::InvalidURIError)"
-		ensure
-		#continue operation
-		end
+	new_uri = "#{home_uri}#{element[0]}"		
+	visit_url new_uri, i+1
 	end
 end
-
 
 home_uri="https://www.bondora.com/"
 visit_url home_uri, 0
 
-puts "Full:"
-$recursionArray.each{ |i| puts i } 
-puts $recursionArray.length
+#puts "Full:"
+#$recursionArray.each{ |i| puts i } 
+#puts $recursionArray.length
