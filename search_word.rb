@@ -2,7 +2,7 @@ require 'nokogiri'
 require "net/http"
 require "net/https"
 	
-	home_uri="https://www.bondora.com/en/loan/loan-application"
+	home_uri="https://www.bondora.com/en/loan/"
 	uri = URI.parse(home_uri)
 	http = Net::HTTP.new(uri.host, uri.port)
 	http.use_ssl = true
@@ -16,13 +16,13 @@ response = response.body
 page = Nokogiri::HTML(response)
 page.css('script, link, title').each { |node| node.remove }
 
-array3 = page.css('body').inner_text.scan(/(?i)loan/)
+loan = page.css('body').inner_text.scan(/(?i)loan/)
+invest = page.css('body').inner_text.scan(/(?i)invest/)
 
 puts "Loan case insensitive:"
 #puts array3
-puts array3.length
+puts loan.length
 
-
-
-
-
+puts "Invest insensitive:"
+#puts array3
+puts invest.length
