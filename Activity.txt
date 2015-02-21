@@ -1,2 +1,6 @@
 1. sudo apt-get install ruby
 2. http://ruby-doc.org/core-2.2.0/
+
+3.Currency search and parse
+http://stackoverflow.com/questions/20484084/ruby-string-with-usd-money-converted-to-number
+http://stackoverflow.com/questions/354044/what-is-the-best-u-s-currency-regex
