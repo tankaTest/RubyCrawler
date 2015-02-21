@@ -1,3 +1,4 @@
+require 'nokogiri'
 require "net/http"
 require "uri"
 require 'open-uri'
@@ -7,7 +8,7 @@ require "uri"
 require 'set'
 
 	
-	home_uri="https://www.bondora.com/en/loan"
+	home_uri="https://www.bondora.com/en/loan/"
 	uri = URI.parse(home_uri)
 	http = Net::HTTP.new(uri.host, uri.port)
 	http.use_ssl = true
@@ -18,13 +19,26 @@ require 'set'
 	
 response = response.body
 
-#puts response
 page = Nokogiri::HTML(response)
-#puts page
+page.css('script, link, title').each { |node| node.remove }
 
-page.css('script, link').each { |node| node.remove }
-#puts page.css('body').inner_text
-puts page.inner_text
-#puts page.css('body').text.squeeze(" \n")
 
-#puts page.text
+array1 = page.css('body').inner_text.scan(/.{0,20}loan.{0,20}/)
+array2 = page.css('body').inner_text.scan(/.{0,20}Loan.{0,20}/)
+#array1 = page.css('body').inner_text.scan(/loan.{0,}/)
+#array2 = page.css('body').inner_text.scan(/Loan.{0,}/)
+array3 = page.css('body').inner_text.scan(/loans/)
+array4= page.css('body').inner_text.scan(/Loans/)
+
+puts "loan count:"
+#puts array1
+#array1.each{ |i| puts i } 
+puts array1.length
+
+puts "Loan count:"
+#puts array2
+#array2.each{ |i| puts i } 
+puts array2.length
+
+
+
