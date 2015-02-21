@@ -25,8 +25,8 @@ response = response.body
 page = Nokogiri::HTML(response)
 page.css('script, link, title').each { |node| node.remove }
 
-loan = page.css('body').inner_text.scan(/(?i)loan/)
-invest = page.css('body').inner_text.scan(/"(?i)invest"/)
+loan = page.css('body').inner_text.scan(/\b(?i)loan\b/)
+invest = page.css('body').inner_text.scan(/\b(?i)invest\b/)
 
 puts "Loan case insensitive:"
 #puts array3
@@ -85,3 +85,6 @@ visit_url home_uri, 0
 #puts "Full:"
 #$recursionArray.each{ |i| puts i } 
 #puts $recursionArray.length
+
+
+
