@@ -1,3 +1,6 @@
+
+http://stackoverflow.com/questions/354044/what-is-the-best-u-s-currency-regex
+
 /\u20AC[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?/
 
 \u20AC euro
