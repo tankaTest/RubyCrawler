@@ -23,12 +23,12 @@ page = Nokogiri::HTML(response)
 page.css('script, link, title').each { |node| node.remove }
 
 
-array1 = page.css('body').inner_text.scan(/.{0,20}loan.{0,20}/)
-array2 = page.css('body').inner_text.scan(/.{0,20}Loan.{0,20}/)
-#array1 = page.css('body').inner_text.scan(/loan.{0,}/)
-#array2 = page.css('body').inner_text.scan(/Loan.{0,}/)
-array3 = page.css('body').inner_text.scan(/loans/)
-array4= page.css('body').inner_text.scan(/Loans/)
+#array1 = page.css('body').inner_text.scan(/.{0,20}loan.{0,20}/)
+#array2 = page.css('body').inner_text.scan(/.{0,20}Loan.{0,20}/)
+array1 = page.css('body').inner_text.scan(/loan/)
+array2 = page.css('body').inner_text.scan(/Loan/)
+array3 = page.css('body').inner_text.scan(/(?i)loan/)
+array4= page.css('body').inner_text.scan(/LOAN/)
 
 puts "loan count:"
 #puts array1
@@ -39,6 +39,14 @@ puts "Loan count:"
 #puts array2
 #array2.each{ |i| puts i } 
 puts array2.length
+
+puts "Loan case insensitive:"
+puts array3
+#array2.each{ |i| puts i } 
+puts array3.length
+
+#puts array4.length
+
 
 
 
