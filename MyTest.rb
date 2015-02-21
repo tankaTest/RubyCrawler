@@ -1,8 +1,42 @@
+require 'net/http'
 require "net/https"
 require "uri"
 require 'set'
+require 'nokogiri'
 
 $recursionArray = Set.new []
+
+def price_occurences(response)
+respBody = response.body.force_encoding("UTF-8")
+
+price_with_currency = respBody.scan(/\u20AC[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?/)
+p price_with_currency
+
+price = price_with_currency.map{ |i| i.gsub(/[^\d\.]/, '').to_f }
+p price
+
+puts "Average:"
+puts (price.reduce(:+) / price.size).round(2)
+end
+
+
+def words_counter(response)
+response = response.body
+page = Nokogiri::HTML(response)
+page.css('script, link, title').each { |node| node.remove }
+
+loan = page.css('body').inner_text.scan(/(?i)loan/)
+invest = page.css('body').inner_text.scan(/"(?i)invest"/)
+
+puts "Loan case insensitive:"
+#puts array3
+puts loan.length
+
+puts "Invest insensitive:"
+#puts array3
+puts invest.length
+end
+
 
 def visit_url(new_uri, i)
 	
@@ -28,9 +62,12 @@ def visit_url(new_uri, i)
 	
 		begin
 		response = http.request(request)
+		price_occurences(response)
+		words_counter(response)
 		rescue
 		ensure
 		end
+
 
 	regex = /href="\/([^"]+)"/
 	arrayLink = response.body.scan(regex)
