@@ -13,6 +13,11 @@ request = Net::HTTP::Get.new(uri.request_uri)
 response = http.request(request)
 respBody = response.body.force_encoding("UTF-8")
 
-test_price=respBody.scan(/\u20AC[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?/)
-p test_price
-test_price.each{ |i| puts i.gsub(/[^\d\.]/, '').to_f }
+price_with_currency = respBody.scan(/\u20AC[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?/)
+p price_with_currency
+
+price = price_with_currency.map{ |i| i.gsub(/[^\d\.]/, '').to_f }
+p price
+
+puts "Average:"
+puts (price.reduce(:+) / price.size).round(2)
