@@ -43,18 +43,16 @@ respBody = response.body.force_encoding("UTF-8")
 
 price_with_currency = respBody.scan(/\u20AC[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?/)
 #price_with_currency = respBody.scan(/[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?\u20AC/)
-p price_with_currency
+#p price_with_currency
 
 price = price_with_currency.map{ |i| i.gsub(/[^\d\.]/, '').to_f }
-p price
+#p price
 
-puts "Average:"
 average = (price.reduce(:+) / price.size).round(2)
-puts average
-#average = 1.0
+#puts average
+
 $totalAverages.push(average)
 xml.average_price average
-#xml.average_price "test price"
 end
 
 
@@ -66,21 +64,14 @@ page.css('script, link, title').each { |node| node.remove }
 loan = page.css('body').inner_text.scan(/\b(?i)loan\b/)
 invest = page.css('body').inner_text.scan(/\b(?i)invest\b/)
 
-puts "Loan case insensitive:"
-#puts array3
 xml.loan_count loan.length
-puts loan.length
-
-puts "Invest insensitive:"
-#puts array3
 xml.invest_count invest.length
-puts invest.length
 end
 
 
 def visit_url(new_uri, i)
 	
-	if i>1 then 
+	if i>10 then 
 		return
 	end
 	
@@ -121,12 +112,4 @@ end
 
 home_uri="https://www.bondora.com/"
 visit_url home_uri, 0
-
-#puts "Full:"
-#$recursionArray.each{ |i| puts i } 
-#puts $recursionArray.length
-
 print_links_to_xml
-#puts $totalAverages
-
-#p [ "a", "b" ].concat( ["c", "d"] )
