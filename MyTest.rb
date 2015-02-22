@@ -5,7 +5,7 @@ require 'set'
 require 'nokogiri'
 
 $recursionArray = Set.new []
-$totalAverages = []
+$totalAverages = Array.new []
 
 
 def print_links_to_xml
@@ -24,14 +24,14 @@ builder = Nokogiri::XML::Builder.new do |xml|
 	
 		begin
 		response = http.request(request)
-		words_counter response,xml
 		price_occurences response,xml
+		words_counter response,xml
 		rescue
 		ensure
 		end
 	}
 	end
-#	xml.totalAverage ($totalAverages.reduce(:+) / $totalAverages.size).round(2)
+	xml.totalAverage ($totalAverages.reduce(:+) / $totalAverages.size).round(2)
 	}
 	end
 	puts builder.to_xml
@@ -42,16 +42,19 @@ def price_occurences(response,xml)
 respBody = response.body.force_encoding("UTF-8")
 
 price_with_currency = respBody.scan(/\u20AC[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?/)
-price_with_currency2 = respBody.scan(/[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?\u20AC/)
+#price_with_currency = respBody.scan(/[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\.[0-9]{2})?\u20AC/)
 p price_with_currency
 
 price = price_with_currency.map{ |i| i.gsub(/[^\d\.]/, '').to_f }
 p price
 
 puts "Average:"
-puts (price.reduce(:+) / price.size).round(2)
-$totalAverages.add(price.reduce(:+) / price.size).round(2)
-xml.average_price (price.reduce(:+) / price.size).round(2)
+average = (price.reduce(:+) / price.size).round(2)
+puts average
+#average = 1.0
+$totalAverages.push(average)
+xml.average_price average
+#xml.average_price "test price"
 end
 
 
@@ -124,6 +127,6 @@ visit_url home_uri, 0
 #puts $recursionArray.length
 
 print_links_to_xml
-puts $totalAverages
+#puts $totalAverages
 
-p [ "a", "b" ].concat( ["c", "d"] )
+#p [ "a", "b" ].concat( ["c", "d"] )
